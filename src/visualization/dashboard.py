@@ -32,28 +32,21 @@ except Exception as e:
 # Function to load and encode images
 def load_image(file_path):
     try:
-        # List of possible paths to check
-        possible_paths = [
-            file_path,  # Original path
-            f'src/models/visualizations/{file_path.split("/")[-1]}',  # Direct in visualizations
-            f'src/models/visualizations/{file_path.split("_")[0].split("/")[-1]}/{file_path.split("/")[-1]}'  # Model subdirectory
-        ]
-        
-        for path in possible_paths:
-            print(f"Trying to load image from: {path}")
-            if os.path.exists(path):
-                with open(path, 'rb') as img_file:
-                    encoded = base64.b64encode(img_file.read()).decode('ascii')
-                print(f"Successfully loaded image from: {path}")
+        print(f"Attempting to load image from: {file_path}")
+        if os.path.exists(file_path):
+            with open(file_path, 'rb') as img_file:
+                encoded = base64.b64encode(img_file.read()).decode('ascii')
+                print(f"Successfully loaded image from: {file_path}")
                 return f'data:image/png;base64,{encoded}'
-        
-        raise FileNotFoundError(f"Image not found in any of these locations: {', '.join(possible_paths)}")
+        else:
+            print(f"File not found: {file_path}")
+            return None
     except Exception as e:
         print(f"Error loading image {file_path}: {str(e)}")
         return None
 
 # Initialize the Dash app
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, suppress_callback_exceptions=True)
 
 # Define the layout
 app.layout = html.Div([
@@ -107,6 +100,45 @@ eda_layout = html.Div([
         ])
     ], style={'margin-bottom': '30px'}),
     
+    # Missing Values Analysis
+    html.Div([
+        html.H3("Missing Values Analysis"),
+        dcc.Graph(id='missing-values-plot')
+    ], style={'margin-bottom': '30px'}),
+    
+    # Readmission Analysis
+    html.Div([
+        html.H3("Readmission Analysis"),
+        dcc.Graph(id='readmission-distribution-plot'),
+        dcc.Graph(id='readmission-categories-plot')
+    ], style={'margin-bottom': '30px'}),
+    
+    # Medical Conditions Analysis
+    html.Div([
+        html.H3("Medical Conditions Analysis"),
+        dcc.Graph(id='condition-readmission-plot')
+    ], style={'margin-bottom': '30px'}),
+    
+    # Primary Diagnosis Analysis
+    html.Div([
+        html.H3("Primary Diagnosis Analysis"),
+        dcc.Graph(id='diagnosis-distribution-plot'),
+        dcc.Graph(id='diagnosis-readmission-plot')
+    ], style={'margin-bottom': '30px'}),
+    
+    # Discharge Analysis
+    html.Div([
+        html.H3("Discharge Analysis"),
+        dcc.Graph(id='discharge-readmission-plot'),
+        dcc.Graph(id='admission-type-plot')
+    ], style={'margin-bottom': '30px'}),
+    
+    # Previous Admissions Analysis
+    html.Div([
+        html.H3("Previous Admissions Analysis"),
+        dcc.Graph(id='prev-admission-readmission-plot')
+    ], style={'margin-bottom': '30px'}),
+    
     # Readmission Distribution
     html.Div([
         html.H3("Readmission Distribution"),
@@ -149,7 +181,30 @@ eda_layout = html.Div([
             style={'width': '50%', 'margin-bottom': '20px'}
         ),
         dcc.Graph(id='medical-plot')
-    ])
+    ]),
+
+    # Correlation Heatmap
+    html.Div([
+        html.H3("Feature Correlations"),
+        dcc.Graph(
+            figure=px.imshow(
+                data.select_dtypes(include=['float64', 'int64']).corr().round(2),  # Round to 2 decimal places
+                title='Correlation Matrix of Numerical Features',
+                color_continuous_scale='RdBu',
+                zmin=-1,
+                zmax=1,
+                text_auto=True,  # Show correlation values
+                aspect="auto",   # Make the plot fill the available space
+                height=600,      # Medium height
+                width=800        # Medium width
+            ).update_layout(
+                font=dict(size=10),  # Adjust font size for better readability
+                margin=dict(l=50, r=50, t=50, b=50),  # Add margins
+                xaxis=dict(tickangle=45),  # Rotate x-axis labels
+                yaxis=dict(tickangle=0)    # Keep y-axis labels horizontal
+            )
+        )
+    ], style={'margin-bottom': '30px', 'overflow': 'auto'})  # Add scrolling for large plots
 ])
 
 # Model Visualization Page Layout
@@ -405,6 +460,464 @@ def update_medical_plot(selected_feature, pathname):
         title=f'{selected_feature.replace("_", " ").title()} by Readmission Status'
     )
 
+# Callback for missing values visualization
+@app.callback(
+    Output('missing-values-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_missing_values_plot(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Calculate missing values
+    missing_values = data.isnull().sum()
+    missing_values = missing_values[missing_values > 0].sort_values(ascending=False)
+    
+    # Create the plot
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=missing_values.index,
+            y=missing_values.values,
+            marker_color='tomato',
+            text=missing_values.values,
+            textposition='auto'
+        )
+    )
+    
+    fig.update_layout(
+        title='Missing Values per Column (Only Non-Zero)',
+        xaxis_title='Columns',
+        yaxis_title='Number of Missing Entries',
+        xaxis_tickangle=45,
+        height=500,
+        margin=dict(l=50, r=20, t=50, b=150),
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return fig
+
+# Callback for readmission distribution
+@app.callback(
+    Output('readmission-distribution-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_readmission_distribution(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Calculate readmission rate
+    data['readmission'] = data['readmitted'].apply(lambda x: 1 if x in ['<30', '>30'] else 0)
+    readmission_counts = data['readmission'].value_counts()
+    readmission_rate = readmission_counts[1] / len(data) * 100
+    
+    # Create the plot
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=['No', 'Yes'],
+            y=readmission_counts.values,
+            marker_color=['steelblue', 'salmon'],
+            text=[f'{count}<br>({count/len(data)*100:.1f}%)' for count in readmission_counts.values],
+            textposition='auto'
+        )
+    )
+    
+    fig.update_layout(
+        title=f'Readmission Distribution (Overall Rate: {readmission_rate:.1f}%)',
+        xaxis_title='Readmitted (any time)',
+        yaxis_title='Number of Patients',
+        height=500,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return fig
+
+# Callback for readmission categories
+@app.callback(
+    Output('readmission-categories-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_readmission_categories(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Create the plot
+    fig = go.Figure()
+    category_order = ['NO', '>30', '<30']
+    colors = {'NO': 'steelblue', '>30': 'lightgray', '<30': 'seagreen'}
+    
+    for category in category_order:
+        count = len(data[data['readmitted'] == category])
+        fig.add_trace(
+            go.Bar(
+                x=[category],
+                y=[count],
+                name=category,
+                marker_color=colors[category],
+                text=[f'{count}<br>({count/len(data)*100:.1f}%)'],
+                textposition='auto'
+            )
+        )
+    
+    fig.update_layout(
+        title='Distribution of Readmission Categories',
+        xaxis_title='Readmission Status',
+        yaxis_title='Number of Patients',
+        height=500,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False
+    )
+    
+    return fig
+
+# Callback for condition readmission rates
+@app.callback(
+    Output('condition-readmission-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_condition_readmission(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Define ICD ranges
+    conditions_icd = {
+        'diabetes': [(250, 251)],
+        'heart_failure': [(428, 429)],
+        'copd': [(490, 496)],
+        'hypertension': [(401, 405)],
+        'renal_disease': [(585, 586)]
+    }
+    
+    # Helper function
+    def has_icd_range(diag, code_range):
+        try:
+            code = float(diag)
+            return any(start <= code <= end for start, end in code_range)
+        except:
+            return False
+    
+    # Create binary columns
+    for condition, code_range in conditions_icd.items():
+        data[condition] = data[['diag_1', 'diag_2', 'diag_3']].apply(
+            lambda row: any(has_icd_range(code, code_range) for code in row), axis=1
+        ).astype(int)
+    
+    # Calculate readmission rates
+    condition_readmission = {}
+    for condition in conditions_icd:
+        condition_readmission[condition] = [
+            data[data[condition] == 0]['readmission'].mean() * 100,
+            data[data[condition] == 1]['readmission'].mean() * 100
+        ]
+    
+    # Create the plot
+    fig = go.Figure()
+    
+    for i, condition in enumerate(conditions_icd.keys()):
+        fig.add_trace(
+            go.Bar(
+                x=['No', 'Yes'],
+                y=condition_readmission[condition],
+                name=condition.replace('_', ' ').title(),
+                marker_color=['lightblue', 'salmon'],
+                text=[f'{rate:.1f}%' for rate in condition_readmission[condition]],
+                textposition='auto'
+            )
+        )
+    
+    fig.update_layout(
+        title='Readmission Rate by Medical Condition',
+        xaxis_title='Condition Present',
+        yaxis_title='Readmission Rate (%)',
+        height=500,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        barmode='group'
+    )
+    
+    return fig
+
+# Callback for diagnosis distribution
+@app.callback(
+    Output('diagnosis-distribution-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_diagnosis_distribution(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Function to categorize diagnosis codes
+    def map_diagnosis(code):
+        try:
+            code = float(code)
+            if 390 <= code <= 459 or code == 785:
+                return 'Circulatory'
+            elif 460 <= code <= 519 or code == 786:
+                return 'Respiratory'
+            elif 520 <= code <= 579 or code == 787:
+                return 'Digestive'
+            elif 250 <= code < 251:
+                return 'Diabetes'
+            elif 800 <= code <= 999:
+                return 'Injury'
+            elif 710 <= code <= 739:
+                return 'Musculoskeletal'
+            elif 580 <= code <= 629 or code == 788:
+                return 'Genitourinary'
+            elif 140 <= code <= 239:
+                return 'Neoplasms'
+            else:
+                return 'Other'
+        except:
+            return 'Unknown'
+    
+    # Apply mapping and create primary_diagnosis column
+    data['primary_diagnosis'] = data['diag_1'].apply(map_diagnosis)
+    diagnosis_counts = data['primary_diagnosis'].value_counts()
+    
+    # Create the plot
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=diagnosis_counts.index,
+            y=diagnosis_counts.values,
+            marker_color='skyblue',
+            text=[f'{count}<br>({count/len(data)*100:.1f}%)' for count in diagnosis_counts.values],
+            textposition='auto'
+        )
+    )
+    
+    fig.update_layout(
+        title='Distribution of Primary Diagnoses',
+        xaxis_title='Primary Diagnosis Category',
+        yaxis_title='Number of Patients',
+        height=500,
+        xaxis_tickangle=45,
+        margin=dict(l=50, r=20, t=50, b=150),
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return fig
+
+# Callback for diagnosis readmission rates
+@app.callback(
+    Output('diagnosis-readmission-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_diagnosis_readmission(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Function to categorize diagnosis codes
+    def map_diagnosis(code):
+        try:
+            code = float(code)
+            if 390 <= code <= 459 or code == 785:
+                return 'Circulatory'
+            elif 460 <= code <= 519 or code == 786:
+                return 'Respiratory'
+            elif 520 <= code <= 579 or code == 787:
+                return 'Digestive'
+            elif 250 <= code < 251:
+                return 'Diabetes'
+            elif 800 <= code <= 999:
+                return 'Injury'
+            elif 710 <= code <= 739:
+                return 'Musculoskeletal'
+            elif 580 <= code <= 629 or code == 788:
+                return 'Genitourinary'
+            elif 140 <= code <= 239:
+                return 'Neoplasms'
+            else:
+                return 'Other'
+        except:
+            return 'Unknown'
+    
+    # Apply mapping and create primary_diagnosis column
+    data['primary_diagnosis'] = data['diag_1'].apply(map_diagnosis)
+    
+    # Calculate readmission rates by diagnosis
+    diagnosis_readmission = data.groupby('primary_diagnosis')['readmission'].mean() * 100
+    diagnosis_readmission = diagnosis_readmission.sort_values(ascending=False)
+    
+    # Create the plot
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=diagnosis_readmission.index,
+            y=diagnosis_readmission.values,
+            marker_color='lightcoral',
+            text=[f'{rate:.1f}%' for rate in diagnosis_readmission.values],
+            textposition='auto'
+        )
+    )
+    
+    fig.update_layout(
+        title='Readmission Rate by Primary Diagnosis',
+        xaxis_title='Primary Diagnosis Category',
+        yaxis_title='Readmission Rate (%)',
+        height=500,
+        xaxis_tickangle=45,
+        margin=dict(l=50, r=20, t=50, b=150),
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return fig
+
+# Callback for discharge readmission rates
+@app.callback(
+    Output('discharge-readmission-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_discharge_readmission(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Map discharge dispositions
+    disposition_mapping = {
+        1: 'Home',
+        2: 'Skilled Nursing',
+        3: 'Home Health',
+        6: 'Home Health',
+        7: 'Left AMA',
+        20: 'Other',
+        30: 'Expired',
+        99: 'Unknown'
+    }
+    
+    data['discharge_disposition_name'] = data['discharge_disposition_id'].map(disposition_mapping).fillna('Other')
+    disposition_readmission = data.groupby('discharge_disposition_name')['readmission'].mean() * 100
+    disposition_readmission = disposition_readmission.sort_values(ascending=False)
+    
+    # Create the plot
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=disposition_readmission.index,
+            y=disposition_readmission.values,
+            marker_color='skyblue',
+            text=[f'{rate:.1f}%' for rate in disposition_readmission.values],
+            textposition='auto'
+        )
+    )
+    
+    fig.update_layout(
+        title='Readmission Rate by Discharge Disposition',
+        xaxis_title='Discharge Disposition',
+        yaxis_title='Readmission Rate (%)',
+        height=500,
+        xaxis_tickangle=45,
+        margin=dict(l=50, r=20, t=50, b=150),
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return fig
+
+# Callback for admission type distribution
+@app.callback(
+    Output('admission-type-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_admission_type(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Map admission types
+    admission_type_mapping = {
+        1: 'Emergency',
+        2: 'Urgent',
+        3: 'Elective',
+        4: 'Newborn',
+        5: 'Not Available',
+        6: 'NULL',
+        7: 'Trauma Center',
+        8: 'Not Mapped'
+    }
+    
+    data['admission_type'] = data['admission_type_id'].map(admission_type_mapping)
+    admission_counts = data['admission_type'].value_counts()
+    
+    # Create the plot
+    fig = go.Figure()
+    fig.add_trace(
+        go.Pie(
+            labels=admission_counts.index,
+            values=admission_counts.values,
+            textinfo='label+percent',
+            insidetextorientation='radial',
+            marker=dict(colors=px.colors.qualitative.Set3)
+        )
+    )
+    
+    fig.update_layout(
+        title='Distribution of Admission Types',
+        height=500,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return fig
+
+# Callback for previous admissions readmission rates
+@app.callback(
+    Output('prev-admission-readmission-plot', 'figure'),
+    [Input('url', 'pathname')]
+)
+def update_prev_admission_readmission(pathname):
+    if pathname not in ['/', '/eda']:
+        return dash.no_update
+    if data.empty:
+        return go.Figure()
+    
+    # Calculate readmission rates by number of previous admissions
+    prev_admission_readmission = data.groupby('number_inpatient')['readmission'].mean() * 100
+    
+    # Create the plot
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=prev_admission_readmission.index,
+            y=prev_admission_readmission.values,
+            marker_color='skyblue',
+            text=[f'{rate:.1f}%' for rate in prev_admission_readmission.values],
+            textposition='auto'
+        )
+    )
+    
+    fig.update_layout(
+        title='Readmission Rate by Number of Previous Inpatient Admissions',
+        xaxis_title='Number of Previous Inpatient Admissions',
+        yaxis_title='Readmission Rate (%)',
+        height=500,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
+    
+    return fig
+
 # Callback for model visualizations
 @app.callback(
     [Output('model-metrics', 'children'),
@@ -415,11 +928,16 @@ def update_medical_plot(selected_feature, pathname):
     [Input('model-dropdown', 'value')]
 )
 def update_model_visualizations(selected_model):
+    if not selected_model:
+        return dash.no_update
+
     try:
-        print(f"Updating visualizations for model: {selected_model}")
+        print(f"\nUpdating visualizations for model: {selected_model}")
+        base_path = 'src/models/visualizations'
+        
         # Load classification report
+        report_path = f'{base_path}/{selected_model}_classification_report.csv'
         try:
-            report_path = f'src/models/visualizations/{selected_model}_classification_report.csv'
             print(f"Loading classification report from: {report_path}")
             report = pd.read_csv(report_path)
             metrics_html = html.Div([
@@ -436,21 +954,18 @@ def update_model_visualizations(selected_model):
             print(f"Error loading classification report: {str(e)}")
             metrics_html = html.Div("Error loading metrics", 
                                   style={'color': 'red', 'padding': '10px', 'background': '#fff3f3'})
-        
-        # Load images with explicit paths
-        base_path = 'src/models/visualizations'
+
+        # Load all visualization images
         confusion_matrix_src = load_image(f'{base_path}/{selected_model}_confusion_matrix.png')
         roc_curve_src = load_image(f'{base_path}/{selected_model}_roc_curve.png')
         pr_curve_src = load_image(f'{base_path}/{selected_model}_pr_curve.png')
-        
-        # Create feature importance plot from CSV
+
+        # Load and create feature importance plot
+        feature_importance_src = None
         try:
             feature_importance_path = f'{base_path}/{selected_model}_feature_importance.csv'
-            print(f"Loading feature importance from: {feature_importance_path}")
-            
             if os.path.exists(feature_importance_path):
                 feature_importance = pd.read_csv(feature_importance_path)
-                print(f"Feature importance data loaded successfully with shape: {feature_importance.shape}")
                 
                 # Sort features by importance
                 feature_importance = feature_importance.sort_values('importance', ascending=True)
@@ -484,18 +999,16 @@ def update_model_visualizations(selected_model):
                 img_bytes = fig_importance.to_image(format="png")
                 encoded = base64.b64encode(img_bytes).decode('ascii')
                 feature_importance_src = f'data:image/png;base64,{encoded}'
-                print("Feature importance plot created successfully")
             else:
                 print(f"Feature importance file not found: {feature_importance_path}")
-                feature_importance_src = None
         except Exception as e:
             print(f"Error creating feature importance plot: {str(e)}")
-            print(traceback.format_exc())  # Add detailed error trace
-            feature_importance_src = None
-        
+            print(traceback.format_exc())
+
         # Create placeholder for missing images
         placeholder_src = None
-        
+
+        # Force update by ensuring we're returning new values
         return (
             metrics_html,
             confusion_matrix_src or placeholder_src,
@@ -503,6 +1016,7 @@ def update_model_visualizations(selected_model):
             pr_curve_src or placeholder_src,
             feature_importance_src or placeholder_src
         )
+
     except Exception as e:
         print(f"Error in update_model_visualizations: {str(e)}")
         error_div = html.Div(f"Error loading visualizations: {str(e)}", 
