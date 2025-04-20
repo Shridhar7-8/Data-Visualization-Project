@@ -179,7 +179,12 @@ def load_models():
             'logistic_regression': joblib.load(os.path.join(models_dir, 'logistic_regression.pkl')),
             'random_forest': joblib.load(os.path.join(models_dir, 'random_forest.pkl')),
             'gradient_boosting': joblib.load(os.path.join(models_dir, 'gradient_boosting.pkl')),
-            'best_model': joblib.load(os.path.join(models_dir, 'best_model.pkl'))
+            'best_model': joblib.load(os.path.join(models_dir, 'best_model.pkl')),
+            'xgboost': joblib.load(os.path.join(models_dir, 'xgboost.pkl')),
+            'catboost': joblib.load(os.path.join(models_dir, 'catboost.pkl')),
+            'lightgbm': joblib.load(os.path.join(models_dir, 'lightgbm.pkl')),
+            'voting': joblib.load(os.path.join(models_dir, 'voting.pkl')),
+            'stacking': joblib.load(os.path.join(models_dir, 'stacking.pkl'))
         }
         print("Models loaded successfully")
         return models

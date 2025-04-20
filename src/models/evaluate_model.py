@@ -22,8 +22,8 @@ def load_test_data():
     tuple
         (X_test, y_test) test features and target
     """
-    X_test = pd.read_csv('data/features/X_test.csv')
-    y_test = pd.read_csv('data/features/y_test.csv').values.ravel()
+    X_test = pd.read_csv(r'E:\Data-Visualization-Project\src\features\data\features\X_test.csv')
+    y_test = pd.read_csv(r'E:\Data-Visualization-Project\src\features\data\features\y_test.csv').values.ravel()
     return X_test, y_test
 
 def load_models():
