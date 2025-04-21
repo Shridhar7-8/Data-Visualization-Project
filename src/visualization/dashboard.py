@@ -14,7 +14,7 @@ import traceback
 
 # Load the data
 try:
-    data = pd.read_csv('notebooks/diabetic_data.csv')
+    data = pd.read_csv(r'E:\Data-Visualization-Project\notebooks\diabetic_data.csv')
     print("Data loaded successfully")
 except Exception as e:
     print(f"Error loading data: {str(e)}")
@@ -22,7 +22,7 @@ except Exception as e:
 
 # Load model metrics
 try:
-    metrics_path = 'src/models/visualizations/model_metrics.csv'
+    metrics_path = r'E:\Data-Visualization-Project\src\models\visualizations\model_metrics.csv'
     model_metrics = pd.read_csv(metrics_path)
     print("Model metrics loaded successfully")
 except Exception as e:
@@ -215,7 +215,7 @@ model_viz_layout = html.Div([
     html.Div([
         html.H3("Model Comparison"),
         html.Img(
-            src=load_image('src/models/visualizations/model_comparison.png'),
+            src=load_image(r'E:\Data-Visualization-Project\src\models\visualizations\model_comparison.png'),
             style={'width': '100%', 'margin-bottom': '20px'}
         )
     ]),
@@ -933,7 +933,7 @@ def update_model_visualizations(selected_model):
 
     try:
         print(f"\nUpdating visualizations for model: {selected_model}")
-        base_path = 'src/models/visualizations'
+        base_path = r'E:\Data-Visualization-Project\src\models\visualizations'
         
         # Load classification report
         report_path = f'{base_path}/{selected_model}_classification_report.csv'
@@ -1037,6 +1037,7 @@ def update_model_visualizations(selected_model):
      Input('risk-threshold-slider', 'value')],
     [dash.dependencies.State('url', 'pathname')]
 )
+
 def update_predictions(selected_model, threshold, pathname):
     try:
         print(f"Updating predictions for model: {selected_model}, threshold: {threshold}, pathname: {pathname}")
@@ -1045,8 +1046,8 @@ def update_predictions(selected_model, threshold, pathname):
             print("Not on predictions page, returning no_update")
             return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
             
-        # Load predictions
-        pred_path = f'src/models/predictions/{selected_model}_predictions.csv'
+        base_path = r'E:\Data-Visualization-Project\src\models\predictions'
+        pred_path = os.path.join(base_path, f'{selected_model}_predictions.csv')
         print(f"Loading predictions from: {pred_path}")
         
         if not os.path.exists(pred_path):
