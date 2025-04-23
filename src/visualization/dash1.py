@@ -445,6 +445,25 @@ def serve_model_viz():
         ])
     ],style={'padding':'20px'})
 
+def serve_predictions():
+    return html.Div([
+        html.H2('Predictions'),
+        dcc.Dropdown(
+            id='prediction-model-dropdown',
+            options=[{'label': m, 'value': m} for m in model_metrics['model']],
+            value=model_metrics['model'].iloc[0],
+            style={'width': '50%', 'margin-bottom': '20px'}
+        ),
+        html.Div(id='prediction-results'),
+        dcc.Graph(id='prediction-distribution'),
+        html.Div(id='threshold-metrics'),
+        dcc.Graph(id='risk-level-pie'),
+        dcc.Graph(id='risk-level-bar'),
+        html.Div(id='high-risk-patients'),
+        html.Div(id='medium-risk-patients'),
+        html.Div(id='low-risk-patients')
+    ], style={'padding': '20px'})
+
 
 @app.callback(Output('page-content','children'), [Input('url','pathname')])
 def display_page(pathname):
@@ -452,6 +471,8 @@ def display_page(pathname):
         return serve_eda()
     elif pathname == '/model-viz':
         return serve_model_viz()
+    elif pathname == '/predictions':
+        return serve_predictions()
     return serve_eda()
 
 @app.callback(
@@ -471,6 +492,166 @@ def update_model_visualizations(selected_model):
         load_image(roc_path),
         load_image(pr_path)
     )
+
+# Callback for prediction page
+@app.callback(
+    [Output('prediction-results', 'children'),
+     Output('prediction-distribution', 'figure'),
+     Output('threshold-metrics', 'children'),
+     Output('risk-level-pie', 'figure'),
+     Output('risk-level-bar', 'figure'),
+     Output('high-risk-patients', 'children'),
+     Output('medium-risk-patients', 'children'),
+     Output('low-risk-patients', 'children')],
+    [Input('prediction-model-dropdown', 'value')],
+    [dash.dependencies.State('url', 'pathname')]
+)
+def update_predictions(selected_model, pathname):
+    try:
+        threshold = 0.5
+        print(f"Updating predictions for model: {selected_model}, threshold: {threshold}, pathname: {pathname}")
+        
+        if pathname != '/predictions':
+            print("Not on predictions page, returning no_update")
+            return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+        
+        base_path = r'E:\Data-Visualization-Project\src\models\src\models\predictions'
+        pred_path = os.path.join(base_path, f'{selected_model}_predictions.csv')
+        print(f"Loading predictions from: {pred_path}")
+        
+        if not os.path.exists(pred_path):
+            raise FileNotFoundError(f"Predictions file not found: {pred_path}")
+        
+        predictions = pd.read_csv(pred_path)
+        print(f"Loaded predictions from {pred_path} with shape {predictions.shape}")
+        
+        if 'probability' not in predictions.columns:
+            raise ValueError("Probability column not found in predictions file")
+        
+        # Calculate risk levels
+        predictions['risk_level'] = pd.cut(
+            predictions['probability'],
+            bins=[0, 0.3, 0.7, 1.0],
+            labels=['Low', 'Medium', 'High']
+        )
+        
+        # Create distribution plot
+        fig_dist = px.histogram(
+            predictions,
+            y='probability',
+            nbins=50,
+            title='Predicted Probability Distribution',
+            labels={'probability': 'Readmission Probability'},
+            color='risk_level',
+            color_discrete_map={'Low': '#28a745', 'Medium': '#fd7e14', 'High': '#dc3545'},
+            template='plotly_white'
+        )
+        fig_dist.update_layout(
+            showlegend=True,
+            legend_title_text='Risk Level',
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            height=400
+        )
+        
+        # Create risk level pie chart
+        risk_counts = predictions['risk_level'].value_counts()
+        fig_pie = px.pie(
+            values=risk_counts.values,
+            names=risk_counts.index,
+            title='Risk Level Distribution',
+            color=risk_counts.index,
+            color_discrete_map={'Low': '#28a745', 'Medium': '#fd7e14', 'High': '#dc3545'},
+            template='plotly_white'
+        )
+        fig_pie.update_layout(showlegend=True, height=400)
+        fig_pie.update_traces(textposition='inside', textinfo='percent+label')
+        
+        # Create risk level bar chart
+        fig_bar = px.bar(
+            x=risk_counts.index,
+            y=risk_counts.values,
+            title='Number of Patients by Risk Level',
+            labels={'x': 'Risk Level', 'y': 'Number of Patients'},
+            color=risk_counts.index,
+            color_discrete_map={'Low': '#28a745', 'Medium': '#fd7e14', 'High': '#dc3545'},
+            template='plotly_white'
+        )
+        fig_bar.update_layout(
+            showlegend=False,
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            height=400
+        )
+        
+        # Create metrics display
+        metrics_html = html.Div([
+            html.H4(f"Metrics at Threshold: {threshold:.2f}"),
+            html.Table([ 
+                html.Tr([html.Td("High Risk Patients"), html.Td(f"{(predictions['risk_level'] == 'High').sum()}")]),
+                html.Tr([html.Td("Medium Risk Patients"), html.Td(f"{(predictions['risk_level'] == 'Medium').sum()}")]),
+                html.Tr([html.Td("Low Risk Patients"), html.Td(f"{(predictions['risk_level'] == 'Low').sum()}")])
+            ], style={'width': '100%', 'margin': '20px 0', 'border-collapse': 'collapse'})
+        ], style={'padding': '20px', 'background-color': '#f8f9fa', 'border-radius': '5px'})
+        
+        # Create patient risk summaries
+        def create_risk_summary(risk_level, bg_color):
+            risk_data = predictions[predictions['risk_level'] == risk_level]
+            return html.Div([
+                html.P(f"Total: {len(risk_data)} patients"),
+                html.P(f"Average Readmission Probability: {risk_data['probability'].mean():.2%}"),
+                html.P(f"Predicted Readmission Rate: {risk_data['prediction'].mean():.2%}")
+            ], style={'padding': '15px', 'background-color': bg_color, 'border-radius': '5px'})
+        
+        high_risk_html = create_risk_summary('High', '#fff5f5')
+        medium_risk_html = create_risk_summary('Medium', '#fff9f0')
+        low_risk_html = create_risk_summary('Low', '#f0fff4')
+        
+        # Create prediction results summary
+        results_summary = html.Div([
+            html.H4("Prediction Results Summary"),
+            html.P(f"Total Patients: {len(predictions)}"),
+            html.P(f"Average Readmission Probability: {predictions['probability'].mean():.2%}"),
+            html.P(f"Predicted Readmission Rate: {predictions['prediction'].mean():.2%}")
+        ], style={'padding': '20px', 'background-color': '#f8f9fa', 'border-radius': '5px'})
+        
+        print("Successfully generated all visualizations")
+        return (
+            results_summary,
+            fig_dist,
+            metrics_html,
+            fig_pie,
+            fig_bar,
+            high_risk_html,
+            medium_risk_html,
+            low_risk_html
+        )
+        
+    except Exception as e:
+        print(f"Error in update_predictions: {str(e)}")
+        
+        # Create error display
+        error_div = html.Div([
+            html.H4("Error Loading Predictions", style={'color': 'red'}),
+            html.P(str(e))
+        ], style={'color': 'red', 'padding': '20px', 'background-color': '#fff3f3', 'border-radius': '5px'})
+        
+        # Empty figure placeholders
+        empty_fig = go.Figure()
+        empty_fig.update_layout(
+            title='No data available',
+            annotations=[{
+                'text': str(e),
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                'font': {'size': 14}
+            }]
+        )
+        
+        # Return error messages and empty charts for each output
+        return tuple([error_div] + [empty_fig] * 4 + [error_div] * 3)
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
