@@ -6,6 +6,13 @@ import plotly.express as px
 import numpy as np
 import plotly.offline as pyo
 import plotly.graph_objects as go
+import base64
+import os
+
+def load_image(path):
+    with open(path, 'rb') as f:
+        encoded = base64.b64encode(f.read()).decode()
+    return f'data:image/png;base64,{encoded}'
 
 # Load the data
 data = pd.read_csv(r'E:\Data-Visualization-Project\notebooks\diabetic_data.csv')
@@ -169,6 +176,9 @@ prev_in_pct = (
 # 19. Distribution of Discharge Disposition Categories (Treemap)
 disp_count_df = data['discharge_name'].value_counts().reset_index()
 disp_count_df.columns = ['disposition', 'count']
+
+metrics_path=r'E:\Data-Visualization-Project\src\models\model_metrics.csv'
+model_metrics=pd.read_csv(metrics_path)
 
 # Initialize Dash app
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
@@ -404,11 +414,63 @@ app.layout = html.Div([
     html.Div(id='page-content', style={'max-width':'1200px','margin':'0 auto'})
 ])
 
+def serve_model_viz():
+    base_vis=r'E:\Data-Visualization-Project\src\models\visualizations'
+    default_model = model_metrics['model'].iloc[0]
+    return html.Div([
+        html.H2('Model Visualizations',style={'margin-bottom':'20px'}),
+        html.Div([
+            html.H3('Model Comparison'),
+            html.Img(src=load_image(os.path.join(base_vis,'model_comparison.png')),style={'width':'100%','margin-bottom':'20px'})
+        ]),
+        html.Div([
+            html.H3('Model Performance Metrics'),
+            dcc.Dropdown(
+                id='model-dropdown',
+                options=[{'label':m,'value':m} for m in model_metrics['model']],
+                value=model_metrics['model'].iloc[0],
+                style={'width':'50%','margin-bottom':'20px'}
+            ),
+            html.Div(id='model-metrics')
+        ]),
+        html.Div([
+            html.Div([html.H4('Confusion Matrix'),html.Img(id='confusion-matrix',
+                                                           src= load_image(os.path.join(base_vis,f"{default_model}_confusion_matrix.png")),
+                                                           style={'width':'100%'})],style={'width':'33%','display':'inline-block','padding':'10px'}),
+            html.Div([html.H4('ROC Curve'),html.Img(id='roc-curve',
+                                                    src=load_image(os.path.join(base_vis,f"{default_model}_roc_curve.png")),
+                                                    style={'width':'100%'})],style={'width':'33%','display':'inline-block','padding':'10px'}),
+            html.Div([html.H4('PR Curve'),html.Img(id='pr-curve',src=load_image(os.path.join(base_vis,f"{default_model}_pr_curve.png")),
+                                                   style={'width':'100%'})],style={'width':'33%','display':'inline-block','padding':'10px'})
+        ])
+    ],style={'padding':'20px'})
+
+
 @app.callback(Output('page-content','children'), [Input('url','pathname')])
 def display_page(pathname):
     if pathname == '/eda':
         return serve_eda()
+    elif pathname == '/model-viz':
+        return serve_model_viz()
     return serve_eda()
+
+@app.callback(
+    Output('confusion-matrix', 'src'),
+    Output('roc-curve', 'src'),
+    Output('pr-curve', 'src'),
+    Input('model-dropdown', 'value')
+)
+def update_model_visualizations(selected_model):
+    base_vis = r'E:\Data-Visualization-Project\src\models\visualizations'
+    confusion_path = os.path.join(base_vis, f"{selected_model}_confusion_matrix.png")
+    roc_path = os.path.join(base_vis, f"{selected_model}_roc_curve.png")
+    pr_path = os.path.join(base_vis, f"{selected_model}_pr_curve.png")
+
+    return (
+        load_image(confusion_path),
+        load_image(roc_path),
+        load_image(pr_path)
+    )
 
 if __name__ == '__main__':
     app.run_server(debug=True)
