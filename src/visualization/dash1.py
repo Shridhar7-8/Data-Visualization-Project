@@ -64,7 +64,7 @@ gender_pct = (
     .reset_index(drop=True)
 )
 
-# 5. Medications vs Hospital Stay (no prep required)
+
 
 # 6. Admission Type Distribution
 admit_df = data.groupby(['admission_type_name', 'readmitted']).size().reset_index(name='count')
@@ -288,7 +288,7 @@ def serve_eda():
         dcc.Graph(
             figure=go.Figure(
                 data=[
-                    # vertical “heads” in crimson
+            
                     go.Scatter(
                         x=diag_rates['primary_diagnosis'],
                         y=diag_rates['readmission_rate'],
@@ -301,13 +301,13 @@ def serve_eda():
                     title='Readmission % by Primary Diagnosis',
                     xaxis=dict(
                         title='Diagnosis',
-                        tickangle=-45,           # rotate labels for readability
-                        categoryorder='total descending'  # highest first
+                        tickangle=-45,           
+                        categoryorder='total descending' 
                     ),
                     yaxis=dict(title='Readmission Rate (%)'),
-                    margin=dict(b=150, l=80),     # bottom margin for rotated labels
+                    margin=dict(b=150, l=80),    
                     shapes=[
-                        # vertical sticks from y=0 up to each rate
+                        
                         dict(
                             type='line',
                             xref='x',
