@@ -403,16 +403,120 @@ def serve_eda():
 app.layout = html.Div([
     html.Nav([
         html.Div([
-            html.H1("Diabetic Readmission Analysis", style={'color':'white'}),
+            html.H3("Diabetic Readmission Analysis", style={'color':'white','margin':'0 40px 0 0'}),
             html.Ul([
-                html.Li(dcc.Link('EDA', href='/eda')),html.Li(dcc.Link('Model Viz', href='/model-viz')),
+                html.Li(dcc.Link('Home', href='/')),html.Li(dcc.Link('EDA', href='/eda')),html.Li(dcc.Link('Model Viz', href='/model-viz')),
                 html.Li(dcc.Link('Predictions', href='/predictions')),html.Li(dcc.Link('Recommendations', href='/recommendations'))
             ], style={'display':'flex','list-style':'none','gap':'20px'})
-        ], style={'display':'flex','justify-content':'space-between','align-items':'center','width':'100%'})
-    ], style={'background-color':'#333','padding':'15px','box-shadow':'0 2px 4px rgba(0,0,0,0.1)'}),
+        ], style={'display':'flex','justify-content':'space-between','align-items':'center','width':'95%'})
+    ], style={'background-color':'#333','padding':'15px','box-shadow':'0 2px 4px rgba(0,0,0,0.1)', 'position':'fixed', 'top':'0', 'width':'100%', 'z-index':'1000'}),
     dcc.Location(id='url', refresh=False),
-    html.Div(id='page-content', style={'max-width':'1200px','margin':'0 auto'})
+    html.Div(id='page-content', style={'max-width':'1200px','margin':'0 auto', 'padding-top':'80px'})
 ])
+
+def serve_home():
+    return html.Div([
+        # Hero Section
+        html.Div([
+            html.Div([
+                html.H2("Diabetes Readmission Prediction Project", 
+                       style={'color':'white', 'fontSize':'2.5rem', 'marginBottom':'20px'}),
+                html.P("An end-to-end solution for predicting hospital readmissions for diabetes patients using machine learning.",
+                      style={'color':'white', 'fontSize':'1.2rem', 'maxWidth':'800px'})
+            ], style={'padding':'80px 20px', 'background':'linear-gradient(135deg, #3498db, #2c3e50)'})
+        ], style={'margin':'-20px -20px 40px -20px'}),
+        
+        # Project Overview
+        html.Div([
+            html.H3("Project Overview", style={'color':'#2c3e50', 'marginBottom':'30px'}),
+            html.Div([
+                html.Div([
+                    html.H4("Data Pipeline", style={'color':'#3498db'}),
+                    html.P("Automated data cleaning, preprocessing, and feature engineering pipelines"),
+                    html.H4("ML Models", style={'color':'#3498db'}),
+                    html.P("Multiple machine learning models trained and evaluated for optimal performance"),
+                    html.H4("Dashboard", style={'color':'#3498db'}),
+                    html.P("Interactive visualization platform for monitoring readmission risks"),
+                    html.H4("Resource Optimization", style={'color':'#3498db'}),
+                    html.P("Data-driven recommendations for healthcare resource allocation")
+                ], style={'flex':'1', 'padding':'20px', 'background':'#f8f9fa', 'borderRadius':'10px',
+                          'marginRight':'20px'}),
+                
+                # Team Members
+                html.Div([
+                    html.H3("Team Members", style={'color':'#2c3e50', 'marginBottom':'20px'}),
+                    html.Div([
+                        html.Div([
+                            html.Div([
+                                html.H4("Shridhar Kumar", style={'margin':'0'}),
+                                html.P("Team Lead", style={'color':'#7f8c8d', 'margin':'5px 0'})
+                            ], style={'padding':'15px'})
+                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px', 'marginBottom':'15px'}),
+                        
+                        html.Div([
+                            html.Div([
+                                html.H4("Kritika Gahlawat", style={'margin':'0'}),
+                                
+                            ], style={'padding':'15px'})
+                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px', 'marginBottom':'15px'}),
+                        
+                        html.Div([
+                            html.Div([
+                                html.H4("Biswajit Gorai", style={'margin':'0'}),
+                        
+                            ], style={'padding':'15px'})
+                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px', 'marginBottom':'15px'}),
+                        
+                        html.Div([
+                            html.Div([
+                                html.H4("Neha Rana", style={'margin':'0'}),
+                                
+                            ], style={'padding':'15px'})
+                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px', 'marginBottom':'15px'}),
+                        
+                        html.Div([
+                            html.Div([
+                                html.H4("Saswata Ghosh", style={'margin':'0'}),
+                        
+                            ], style={'padding':'15px'})
+                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px'})
+                    ], style={'display':'flex', 'flexDirection':'column'})
+                ], style={'flex':'0 0 300px', 'padding':'20px', 'background':'white', 
+                         'borderRadius':'10px', 'boxShadow':'0 2px 4px rgba(0,0,0,0.1)'})
+            ], style={'display':'flex', 'gap':'30px', 'marginBottom':'40px'}),
+            
+            # Key Features
+            html.Div([
+                html.H3("Key Features", style={'color':'#2c3e50', 'marginBottom':'30px'}),
+                html.Div([
+                    html.Div([
+                        html.Img(src="https://cdn-icons-png.flaticon.com/512/1534/1534959.png",
+                                style={'height':'60px', 'marginBottom':'15px'}),
+                        html.H4("Predictive Analytics"),
+                        html.P("Advanced ML models for accurate readmission prediction", 
+                              style={'color':'#7f8c8d'})
+                    ], style={'textAlign':'center', 'padding':'20px', 'flex':'1'}),
+                    
+                    html.Div([
+                        html.Img(src="https://cdn-icons-png.flaticon.com/512/2103/2103787.png",
+                                style={'height':'60px', 'marginBottom':'15px'}),
+                        html.H4("Interactive Dashboard"),
+                        html.P("Real-time visualization of patient data and predictions", 
+                              style={'color':'#7f8c8d'})
+                    ], style={'textAlign':'center', 'padding':'20px', 'flex':'1'}),
+                    
+                    html.Div([
+                        html.Img(src="https://cdn-icons-png.flaticon.com/512/3594/3594465.png",
+                                style={'height':'60px', 'marginBottom':'15px'}),
+                        html.H4("Clinical Insights"),
+                        html.P("Actionable recommendations for healthcare providers", 
+                              style={'color':'#7f8c8d'})
+                    ], style={'textAlign':'center', 'padding':'20px', 'flex':'1'})
+                ], style={'display':'flex', 'gap':'30px', 'background':'#f8f9fa',
+                          'padding':'30px', 'borderRadius':'10px'})
+            ])
+        ], style={'maxWidth':'1200px', 'margin':'0 auto'})
+    ])
 
 def serve_model_viz():
     base_vis=r'E:\Data-Visualization-Project\src\models\visualizations'
@@ -467,13 +571,15 @@ def serve_predictions():
 
 @app.callback(Output('page-content','children'), [Input('url','pathname')])
 def display_page(pathname):
-    if pathname == '/eda':
+    if pathname == '/':
+        return serve_home()
+    elif pathname == '/eda':
         return serve_eda()
     elif pathname == '/model-viz':
         return serve_model_viz()
     elif pathname == '/predictions':
         return serve_predictions()
-    return serve_eda()
+    return serve_home()
 
 @app.callback(
     Output('confusion-matrix', 'src'),
