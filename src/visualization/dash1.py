@@ -1,4 +1,5 @@
 import dash
+import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
 import pandas as pd
@@ -180,8 +181,14 @@ disp_count_df.columns = ['disposition', 'count']
 metrics_path=r'E:\Data-Visualization-Project\src\models\model_metrics.csv'
 model_metrics=pd.read_csv(metrics_path)
 
+
+external_stylesheets = [
+    dbc.themes.BOOTSTRAP,  # Keep if using Bootstrap
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'
+]
 # Initialize Dash app
-app = dash.Dash(__name__, suppress_callback_exceptions=True)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
 
 # Serve EDA page with updated plots
 def serve_eda():
@@ -549,6 +556,134 @@ def serve_model_viz():
         ])
     ],style={'padding':'20px'})
 
+
+def serve_recommendations():
+    return html.Div([
+        html.Div([
+            html.H2("Data-Driven Recommendations", 
+                    style={'color': '#2c3e50', 'borderBottom': '2px solid #3498db', 
+                           'paddingBottom': '10px', 'marginBottom': '30px'}),
+
+            # Resource Optimization Section
+            html.Div([
+                html.Div([
+                    html.H3("Resource Optimization", 
+                            style={'color': 'white', 'backgroundColor': '#3498db', 
+                                   'padding': '15px', 'borderRadius': '5px',
+                                   'display': 'flex', 'alignItems': 'center'}),
+                    html.Div([
+                        html.Div([
+                            html.H4("Targeted Monitoring", 
+                                    style={'color': '#3498db', 'marginBottom': '10px'}),
+                            html.Ul([
+                                html.Li("Heart failure patients (55.2% readmission rate)"),
+                                html.Li("Renal disease cases (58.9% readmission)"),
+                                html.Li("COPD patients (53.6% readmission risk)"),
+                            ], style={'listStyle': 'none', 'paddingLeft': '20px'}),
+                            html.P("18-25% higher risk than baseline 46.1%", 
+                                   style={'backgroundColor': '#f8f9fa', 'padding': '10px',
+                                          'borderRadius': '5px', 'fontWeight': 'bold'})
+                        ], style={'padding': '20px', 'border': '1px solid #eee',
+                                  'borderRadius': '5px', 'marginBottom': '20px'}),
+
+                        html.Div([
+                            html.H4("Dynamic Discharge Protocol", 
+                                    style={'color': '#3498db', 'marginBottom': '10px'}),
+                            html.Table([
+                                html.Tr([html.Td("Hospital Stay >6 days"), 
+                                         html.Td("72% longer avg. stay", 
+                                                 style={'color': '#e74c3c'})]),
+                                html.Tr([html.Td("≥3 Previous Admissions"), 
+                                         html.Td("64.9% readmission rate")]),
+                                html.Tr([html.Td(">20 Medications"), 
+                                         html.Td("23% higher risk")]),
+                            ], style={'width': '100%', 'margin': '15px 0'})
+                        ], style={'padding': '20px', 'border': '1px solid #eee',
+                                  'borderRadius': '5px'})
+                    ], style={'marginBottom': '40px'})
+                ], style={'backgroundColor': 'white', 'padding': '30px', 
+                          'borderRadius': '10px', 'boxShadow': '0 4px 6px rgba(0,0,0,0.1)'})
+            ]),
+
+            # Clinical Practice Section
+            html.Div([
+                html.Div([
+                    html.H3("Clinical Practice", 
+                            style={'color': 'white', 'backgroundColor': '#2ecc71', 
+                                   'padding': '15px', 'borderRadius': '5px',
+                                   'display': 'flex', 'alignItems': 'center'}),
+                    html.Div([
+                        html.Div([
+                            html.H4("Medication Management", 
+                                    style={'color': '#2ecc71', 'marginBottom': '10px'}),
+                            html.Div([
+                                html.Div("≥15 Medications", 
+                                         style={'backgroundColor': '#f8f9fa', 
+                                                'padding': '8px 15px',
+                                                'borderRadius': '20px',
+                                                'margin': '5px',
+                                                'display': 'inline-block'}),
+                                html.Div("Diabetes+Hypertension: 48% risk", 
+                                         style={'backgroundColor': '#f8f9fa',
+                                                'padding': '8px 15px',
+                                                'borderRadius': '20px',
+                                                'margin': '5px',
+                                                'display': 'inline-block'})
+                            ]),
+                            html.P("32% higher risk with medication changes",
+                                   style={'color': '#e74c3c', 'fontWeight': 'bold'})
+                        ], style={'padding': '20px', 'border': '1px solid #eee',
+                                  'borderRadius': '5px', 'marginBottom': '20px'}),
+
+                        html.Div([
+                            html.H4("Emergency Admission Protocol", 
+                                    style={'color': '#2ecc71', 'marginBottom': '10px'}),
+                            html.Div([
+                                html.Div([
+                                    html.P("47.3%", 
+                                           style={'fontSize': '2em', 'color': '#2ecc71',
+                                                  'margin': '0', 'fontWeight': 'bold'}),
+                                    html.P("Emergency Admission Readmissions", 
+                                           style={'margin': '0', 'fontSize': '0.9em'})
+                                ], style={'textAlign': 'center', 'padding': '15px',
+                                          'borderRight': '2px solid #eee', 
+                                          'flex': '1'}),
+                                html.Div([
+                                    html.P("51.9%", 
+                                           style={'fontSize': '2em', 'color': '#2ecc71',
+                                                  'margin': '0', 'fontWeight': 'bold'}),
+                                    html.P("SNF Discharge Readmissions", 
+                                           style={'margin': '0', 'fontSize': '0.9em'})
+                                ], style={'textAlign': 'center', 'flex': '1'})
+                            ], style={'display': 'flex', 'justifyContent': 'space-around',
+                                      'padding': '15px 0'})
+                        ], style={'padding': '20px', 'border': '1px solid #eee',
+                                  'borderRadius': '5px'})
+                    ], style={'marginTop': '30px'})
+                ], style={'backgroundColor': 'white', 'padding': '30px', 
+                          'borderRadius': '10px', 'boxShadow': '0 4px 6px rgba(0,0,0,0.1)',
+                          'marginTop': '30px'})
+            ]),
+
+            # Data Rationale Section
+            html.Div([
+                html.H4("Implementation Rationale", 
+                        style={'color': '#2c3e50', 'borderBottom': '2px solid #3498db',
+                               'paddingBottom': '10px'}),
+                html.Ul([
+                    html.Li("Strong correlation: Previous admissions (r=0.217)"),
+                    html.Li("Significant rate differences: 55.2% vs 44.2% in key conditions"),
+                    html.Li("Dose-response: +12.4% risk per 5 additional medications")
+                ], style={'listStyleType': 'none', 'paddingLeft': '0',
+                          'margin': '20px 0'}),
+                html.P("Based on analysis of 101,766 patient encounters",
+                       style={'fontStyle': 'italic', 'color': '#7f8c8d'})
+            ], style={'marginTop': '40px', 'padding': '25px',
+                      'backgroundColor': '#f8f9fa', 'borderRadius': '8px'})
+        ], style={'maxWidth': '1200px', 'margin': '0 auto', 'padding': '40px 20px'})
+    ])
+
+
 def serve_predictions():
     return html.Div([
         html.H2('Predictions'),
@@ -579,6 +714,8 @@ def display_page(pathname):
         return serve_model_viz()
     elif pathname == '/predictions':
         return serve_predictions()
+    elif pathname == '/recommendations':
+        return serve_recommendations()
     return serve_home()
 
 @app.callback(
