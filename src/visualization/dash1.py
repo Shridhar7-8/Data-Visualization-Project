@@ -183,7 +183,7 @@ model_metrics=pd.read_csv(metrics_path)
 
 
 external_stylesheets = [
-    dbc.themes.BOOTSTRAP,  # Keep if using Bootstrap
+    dbc.themes.BOOTSTRAP,
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'
 ]
