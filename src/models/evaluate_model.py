@@ -15,7 +15,7 @@ from sklearn.metrics import (
 
 def load_test_data():
     """
-    Load test data.
+    Load test data
     
     Returns:
     --------
