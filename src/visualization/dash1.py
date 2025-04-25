@@ -41,6 +41,7 @@ admission_mapping = {
 data['admission_type_name'] = data['admission_type_id'].map(admission_mapping).fillna('Other')
 
 # 1. Missing Values DataFrame
+data.replace('?', np.nan, inplace=True)
 missing_counts = data.isnull().sum()
 missing_counts = missing_counts[missing_counts > 0]
 missing_df = pd.DataFrame({
@@ -388,13 +389,13 @@ def serve_eda():
             )
         ),
 
-        # 18. Readmission Rate by Number of Previous Inpatient Admissions
-        html.H4("Readmission Rate by # of Previous Inpatient Admissions"),
-        dcc.Graph(
-            figure=px.line(
-                prev_in_pct, x='number_inpatient', y='pct', title='Readmission % vs # Previous Inpatient Admissions'
-            )
-        ),
+        # # 18. Readmission Rate by Number of Previous Inpatient Admissions
+        # html.H4("Readmission Rate by # of Previous Inpatient Admissions"),
+        # dcc.Graph(
+        #     figure=px.line(
+        #         prev_in_pct, x='number_inpatient', y='pct', title='Readmission % vs # Previous Inpatient Admissions'
+        #     )
+        # ),
 
         # 19. Distribution of Discharge Disposition Categories (Treemap)
         html.H4("Distribution of Discharge Disposition Categories"),
