@@ -40,7 +40,7 @@ admission_mapping = {
 # Map admission_type_id to names
 data['admission_type_name'] = data['admission_type_id'].map(admission_mapping).fillna('Other')
 
-# 1. Missing Values DataFrame
+# 1. Missing Values DataFrame replaced data with NaN
 data.replace('?', np.nan, inplace=True)
 missing_counts = data.isnull().sum()
 missing_counts = missing_counts[missing_counts > 0]
