@@ -561,128 +561,139 @@ def serve_model_viz():
 def serve_recommendations():
     return html.Div([
         html.Div([
-            html.H2("Data-Driven Recommendations", 
+            html.H2("Clinical Risk Prioritization Dashboard", 
+                    className='header-title',
                     style={'color': '#2c3e50', 'borderBottom': '2px solid #3498db', 
-                           'paddingBottom': '10px', 'marginBottom': '30px'}),
+                           'paddingBottom': '15px', 'marginBottom': '30px'}),
 
-            # Resource Optimization Section
+            # High-Risk Diagnoses Section
             html.Div([
                 html.Div([
-                    html.H3("Resource Optimization", 
-                            style={'color': 'white', 'backgroundColor': '#3498db', 
-                                   'padding': '15px', 'borderRadius': '5px',
-                                   'display': 'flex', 'alignItems': 'center'}),
+                    html.H3("High-Risk Diagnoses", className='section-title',
+                            style={'color': '#ffffff', 'backgroundColor': '#3498db'}),
                     html.Div([
                         html.Div([
-                            html.H4("Targeted Monitoring", 
-                                    style={'color': '#3498db', 'marginBottom': '10px'}),
+                            html.Div([
+                                html.Div("58.9%", className='metric-value',
+                                        style={'color': '#e74c3c'}),
+                                html.Div("Renal Disease", className='metric-label')
+                            ], className='metric-card'),
+                            html.Div([
+                                html.Div("55.2%", className='metric-value',
+                                        style={'color': '#e74c3c'}),
+                                html.Div("Heart Failure", className='metric-label'),
+                                html.Span("+19.1% vs baseline", 
+                                         style={'color': '#7f8c8d', 'fontSize': '0.9em'})
+                            ], className='metric-card'),
+                            html.Div([
+                                html.Div("53.6%", className='metric-value',
+                                        style={'color': '#f39c12'}),
+                                html.Div("COPD Patients", className='metric-label'),
+                                html.Span("+16.3% vs baseline", 
+                                         style={'color': '#7f8c8d', 'fontSize': '0.9em'})
+                            ], className='metric-card')
+                        ], className='metrics-container')
+                    ], style={'padding': '20px'})
+                ], className='section-card')
+            ]),
+
+            # Operational Factors Section
+            html.Div([
+                html.Div([
+                    html.H3("Key Operational Factors", className='section-title',
+                            style={'color': '#ffffff', 'backgroundColor': '#2ecc71'}),
+                    html.Div([
+                        html.Div([
+                            html.H4("Hospital Stay Analysis", className='subsection-title'),
                             html.Ul([
-                                html.Li("Heart failure patients (55.2% readmission rate)"),
-                                html.Li("Renal disease cases (58.9% readmission)"),
-                                html.Li("COPD patients (53.6% readmission risk)"),
-                            ], style={'listStyle': 'none', 'paddingLeft': '20px'}),
-                            html.P("18-25% higher risk than baseline 46.1%", 
-                                   style={'backgroundColor': '#f8f9fa', 'padding': '10px',
-                                          'borderRadius': '5px', 'fontWeight': 'bold'})
-                        ], style={'padding': '20px', 'border': '1px solid #eee',
-                                  'borderRadius': '5px', 'marginBottom': '20px'}),
-
+                                html.Li([
+                                    html.Span(">6 day stays:", className='highlight-text'),
+                                    " 72% longer hospitalization duration ",
+                                    #html.Span("(p<0.01)", className='stat-annotation')
+                                ]),
+                                html.Li([
+                                    html.Span("Readmission risk:", className='highlight-text'),
+                                    " 64.9% for ≥3 prior admissions"
+                                ])
+                            ], className='factor-list')
+                        ], className='column', style={'flex': 1}),
+                        
                         html.Div([
-                            html.H4("Dynamic Discharge Protocol", 
-                                    style={'color': '#3498db', 'marginBottom': '10px'}),
-                            html.Table([
-                                html.Tr([html.Td("Hospital Stay >6 days"), 
-                                         html.Td("72% longer avg. stay", 
-                                                 style={'color': '#e74c3c'})]),
-                                html.Tr([html.Td("≥3 Previous Admissions"), 
-                                         html.Td("64.9% readmission rate")]),
-                                html.Tr([html.Td(">20 Medications"), 
-                                         html.Td("23% higher risk")]),
-                            ], style={'width': '100%', 'margin': '15px 0'})
-                        ], style={'padding': '20px', 'border': '1px solid #eee',
-                                  'borderRadius': '5px'})
-                    ], style={'marginBottom': '40px'})
-                ], style={'backgroundColor': 'white', 'padding': '30px', 
-                          'borderRadius': '10px', 'boxShadow': '0 4px 6px rgba(0,0,0,0.1)'})
+                            html.H4("Medication Impact", className='subsection-title'),
+                            html.Div([
+                                html.Div([
+                                    html.Div("23%", className='big-number',
+                                            style={'color': '#e74c3c'}),
+                                    html.Div("Risk increase for >20 medications", 
+                                            className='number-label')
+                                ], className='number-card'),
+                                html.Div([
+                                    html.Div("+12.4%", className='big-number',
+                                            style={'color': '#f39c12'}),
+                                    html.Div("Per 5 additional medications", 
+                                            className='number-label')
+                                ], className='number-card')
+                            ])
+                        ], className='column', style={'flex': 1})
+                    ], className='columns-container')
+                ], className='section-card', style={'marginTop': '30px'})
             ]),
 
-            # Clinical Practice Section
+            # Implementation Guidance
             html.Div([
                 html.Div([
-                    html.H3("Clinical Practice", 
-                            style={'color': 'white', 'backgroundColor': '#2ecc71', 
-                                   'padding': '15px', 'borderRadius': '5px',
-                                   'display': 'flex', 'alignItems': 'center'}),
+                    html.H3("Implementation Strategy", className='section-title',
+                            style={'color': '#ffffff', 'backgroundColor': '#9b59b6'}),
                     html.Div([
                         html.Div([
-                            html.H4("Medication Management", 
-                                    style={'color': '#2ecc71', 'marginBottom': '10px'}),
-                            html.Div([
-                                html.Div("≥15 Medications", 
-                                         style={'backgroundColor': '#f8f9fa', 
-                                                'padding': '8px 15px',
-                                                'borderRadius': '20px',
-                                                'margin': '5px',
-                                                'display': 'inline-block'}),
-                                html.Div("Diabetes+Hypertension: 48% risk", 
-                                         style={'backgroundColor': '#f8f9fa',
-                                                'padding': '8px 15px',
-                                                'borderRadius': '20px',
-                                                'margin': '5px',
-                                                'display': 'inline-block'})
-                            ]),
-                            html.P("32% higher risk with medication changes",
-                                   style={'color': '#e74c3c', 'fontWeight': 'bold'})
-                        ], style={'padding': '20px', 'border': '1px solid #eee',
-                                  'borderRadius': '5px', 'marginBottom': '20px'}),
-
-                        html.Div([
-                            html.H4("Emergency Admission Protocol", 
-                                    style={'color': '#2ecc71', 'marginBottom': '10px'}),
+                            html.H4("Resource Focus Areas", className='subsection-title'),
                             html.Div([
                                 html.Div([
-                                    html.P("47.3%", 
-                                           style={'fontSize': '2em', 'color': '#2ecc71',
-                                                  'margin': '0', 'fontWeight': 'bold'}),
-                                    html.P("Emergency Admission Readmissions", 
-                                           style={'margin': '0', 'fontSize': '0.9em'})
-                                ], style={'textAlign': 'center', 'padding': '15px',
-                                          'borderRight': '2px solid #eee', 
-                                          'flex': '1'}),
+                                    html.Div("1", className='priority-number'),
+                                    html.Div([
+                                        html.Strong("Renal/Heart Patients"),
+                                        html.Br(),
+                                        "58.9%-55.2% readmission risk"
+                                    ], className='priority-text')
+                                ], className='priority-item'),
                                 html.Div([
-                                    html.P("51.9%", 
-                                           style={'fontSize': '2em', 'color': '#2ecc71',
-                                                  'margin': '0', 'fontWeight': 'bold'}),
-                                    html.P("SNF Discharge Readmissions", 
-                                           style={'margin': '0', 'fontSize': '0.9em'})
-                                ], style={'textAlign': 'center', 'flex': '1'})
-                            ], style={'display': 'flex', 'justifyContent': 'space-around',
-                                      'padding': '15px 0'})
-                        ], style={'padding': '20px', 'border': '1px solid #eee',
-                                  'borderRadius': '5px'})
-                    ], style={'marginTop': '30px'})
-                ], style={'backgroundColor': 'white', 'padding': '30px', 
-                          'borderRadius': '10px', 'boxShadow': '0 4px 6px rgba(0,0,0,0.1)',
-                          'marginTop': '30px'})
-            ]),
-
-            # Data Rationale Section
-            html.Div([
-                html.H4("Implementation Rationale", 
-                        style={'color': '#2c3e50', 'borderBottom': '2px solid #3498db',
-                               'paddingBottom': '10px'}),
-                html.Ul([
-                    html.Li("Strong correlation: Previous admissions (r=0.217)"),
-                    html.Li("Significant rate differences: 55.2% vs 44.2% in key conditions"),
-                    html.Li("Dose-response: +12.4% risk per 5 additional medications")
-                ], style={'listStyleType': 'none', 'paddingLeft': '0',
-                          'margin': '20px 0'}),
-                html.P("Based on analysis of 101,766 patient encounters",
-                       style={'fontStyle': 'italic', 'color': '#7f8c8d'})
-            ], style={'marginTop': '40px', 'padding': '25px',
-                      'backgroundColor': '#f8f9fa', 'borderRadius': '8px'})
-        ], style={'maxWidth': '1200px', 'margin': '0 auto', 'padding': '40px 20px'})
-    ])
+                                    html.Div("2", className='priority-number'),
+                                    html.Div([
+                                        html.Strong("Extended Stays"),
+                                        html.Br(),
+                                        "Flag >6 day admissions"
+                                    ], className='priority-text')
+                                ], className='priority-item'),
+                                html.Div([
+                                    html.Div("3", className='priority-number'),
+                                    html.Div([
+                                        html.Strong("Polypharmacy Cases"),
+                                        html.Br(),
+                                        "Monitor >15 medications"
+                                    ], className='priority-text')
+                                ], className='priority-item')
+                            ], className='priority-list')
+                        ], className='column', style={'flex': 1}),
+                        
+                        # html.Div([
+                        #     html.H4("Risk Scoring Model", className='subsection-title'),
+                        #     html.Div([
+                        #         html.Div([
+                        #             html.Div("r=0.217", 
+                        #                     className='correlation-number',
+                        #                     style={'color': '#3498db'}),
+                        #             html.Div("Prior Admissions Correlation", 
+                        #                     className='correlation-label')
+                        #         ], className='correlation-card'),
+                        #         html.P("Based on analysis of 101,766 encounters",
+                        #                className='data-source')
+                        #     ])
+                        # ], className='column', style={'flex': 1})
+                    ], className='columns-container')
+                ], className='section-card', style={'marginTop': '30px'})
+            ])
+        ], className='container')
+    ], style={'backgroundColor': '#f8f9fa', 'minHeight': '100vh'})
 
 
 def serve_predictions():
