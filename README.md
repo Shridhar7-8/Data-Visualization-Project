@@ -21,11 +21,11 @@ This project provides a comprehensive solution for predicting diabetes patient r
   </a>&nbsp;&nbsp;
 
   <a href="https://plotly.com/" target="_blank" rel="noreferrer">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Plotly-logo-01-square.png" alt="Plotly" width="40" height="40"/>
+    <img src="https://seeklogo.com/images/P/plotly-logo-5086CAA6EF-seeklogo.com.png" alt="Plotly" width="60" height="40"/>
   </a>&nbsp;&nbsp;
 
   <a href="https://dash.plotly.com/" target="_blank" rel="noreferrer">
-    <img src="https://raw.githubusercontent.com/plotly/dash-docs/master/images/dash-logo-stripe.png" alt="Dash" width="100" height="40"/>
+    <img src="https://img.icons8.com/ios-filled/50/000000/dash--v1.png" alt="Dash" width="40" height="40"/>
   </a>&nbsp;&nbsp;
 
   <a href="https://getbootstrap.com/" target="_blank" rel="noreferrer">
