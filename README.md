@@ -14,33 +14,25 @@ This project provides a comprehensive solution for predicting diabetes patient r
    
 ## 🛠️ Tools & Libraries Used
 
-<p align="left">
+<h2>🛠️ Tools & Libraries Used</h2>
 
-  <a href="https://www.python.org/" target="_blank" rel="noreferrer">
-    <img src="https://img.icons8.com/color/48/000000/python--v1.png" alt="Python" width="40" height="40"/>
-  </a>&nbsp;&nbsp;
+<p align="left" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
 
-  📊 Dash&nbsp;&nbsp;
+  <img src="https://img.icons8.com/color/48/000000/python--v1.png" alt="Python" width="40" height="40"/>
 
-  💠 Dash Bootstrap Components&nbsp;&nbsp;
+  📊 Dash
 
-  📈 Plotly&nbsp;&nbsp;
+  💠 Dash Bootstrap Components
 
-  <a href="https://getbootstrap.com/" target="_blank" rel="noreferrer">
-    <img src="https://img.icons8.com/color/48/000000/bootstrap.png" alt="Bootstrap" width="40" height="40"/>
-  </a>&nbsp;&nbsp;
+  📈 Plotly
 
-  <a href="https://numpy.org/" target="_blank" rel="noreferrer">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/NumPy_logo_2020.svg" alt="NumPy" width="40" height="40"/>
-  </a>&nbsp;&nbsp;
+  <img src="https://img.icons8.com/color/48/000000/bootstrap.png" alt="Bootstrap" width="40" height="40"/>
 
-  <a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Pandas_logo.svg" alt="Pandas" width="40" height="40"/>
-  </a>&nbsp;&nbsp;
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/NumPy_logo_2020.svg" alt="NumPy" width="40" height="40"/>
 
-  <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noreferrer">
-    <img src="https://img.icons8.com/color/48/000000/css3.png" alt="CSS" width="40" height="40"/>
-  </a>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Pandas_logo.svg" alt="Pandas" width="40" height="40"/>
+
+  <img src="https://img.icons8.com/color/48/000000/css3.png" alt="CSS" width="40" height="40"/>
 
 </p>
 
