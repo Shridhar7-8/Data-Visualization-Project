@@ -16,19 +16,19 @@ This project provides a comprehensive solution for predicting diabetes patient r
 
 <h2>🛠️ Tools & Libraries Used</h2>
 
-<div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
+<div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
 
-  <img src="https://img.icons8.com/color/48/000000/python--v1.png" alt="Python" width="50" height="50"/>
+  <img src="https://img.icons8.com/color/96/000000/python--v1.png" alt="Python" width="70" height="70"/>
   
-  <img src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/48/external-plotly-a-graphing-library-for-making-interactive-graphs-javascript-logo-color-tal-revivo.png" alt="Dash" width="50" height="50"/>
+  <img src="/mnt/data/c37db913-521e-4fb2-adc1-71ab287567f6.png" alt="Plotly" width="70" height="70"/>
   
-  <img src="https://img.icons8.com/fluency/48/bootstrap.png" alt="Bootstrap" width="50" height="50"/>
+  <img src="https://img.icons8.com/fluency/96/bootstrap.png" alt="Bootstrap" width="70" height="70"/>
   
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/NumPy_logo_2020.svg" alt="NumPy" width="50" height="50"/>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/NumPy_logo_2020.svg" alt="NumPy" width="70" height="70"/>
   
-  <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Pandas_logo.svg" alt="Pandas" width="50" height="50"/>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Pandas_logo.svg" alt="Pandas" width="70" height="70"/>
   
-  <img src="https://img.icons8.com/color/48/000000/css3.png" alt="CSS3" width="50" height="50"/>
+  <img src="https://img.icons8.com/color/96/000000/css3.png" alt="CSS3" width="70" height="70"/>
 
 </div>
 
