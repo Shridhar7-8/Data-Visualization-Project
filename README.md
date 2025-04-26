@@ -35,3 +35,19 @@ Follow the steps below to set up and run the Dash-based data visualization appli
    cd /e/
    git clone https://github.com/Shridhar7-8/Data-Visualization-Project.git
    ```
+
+2. **Install the Required Dependencies**
+   Navigate to the cloned directory and install the Python packages:
+
+   ```bash
+   cd E:/Data-Visualization-Project
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Dash Application**
+   Move to the app directory and run the script:
+
+   ```bash
+   cd E:/Data-Visualization-Project/src/visualization
+   python dash1.py
+   ```
