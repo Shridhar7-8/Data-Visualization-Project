@@ -18,3 +18,20 @@ This project provides a comprehensive solution for predicting diabetes patient r
 - Biswajit Gorai
 - Neha Rana
 - Saswata Ghosh
+
+
+# 📊 Data Visualization Project - Setup Instructions
+
+Follow the steps below to set up and run the Dash-based data visualization application on your local machine.
+
+---
+
+## 🚀 Steps to Run the Application
+
+1. **Clone the Repository to E Drive**  
+   Open your terminal and run:
+
+   ```bash
+   cd /e/
+   git clone https://github.com/Shridhar7-8/Data-Visualization-Project.git
+   ```
