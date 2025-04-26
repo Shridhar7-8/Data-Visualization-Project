@@ -20,7 +20,7 @@ This project provides a comprehensive solution for predicting diabetes patient r
 
   <img src="https://img.icons8.com/color/96/000000/python--v1.png" alt="Python" width="70" height="70"/>
   
-  <img src="assets/plotly.png" alt="Plotly" width="70" height="70"/>
+  <img src="assets/plotly.png" alt="Plotly" width="50" height="50"/>
   
   <img src="https://img.icons8.com/fluency/96/bootstrap.png" alt="Bootstrap" width="70" height="70"/>
   
