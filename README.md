@@ -12,7 +12,6 @@ This project provides a comprehensive solution for predicting diabetes patient r
 4. **Resource Allocation**: Recommendations for optimizing healthcare resources
 
    
-## 🛠️ Tools & Libraries Used
 
 <h2>🛠️ Tools & Libraries Used</h2>
 
