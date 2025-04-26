@@ -16,25 +16,22 @@ This project provides a comprehensive solution for predicting diabetes patient r
 
 <h2>🛠️ Tools & Libraries Used</h2>
 
-<p align="left" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+<div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
 
-  <img src="https://img.icons8.com/color/48/000000/python--v1.png" alt="Python" width="40" height="40"/>
+  <img src="https://img.icons8.com/color/48/000000/python--v1.png" alt="Python" width="50" height="50"/>
+  
+  <img src="https://img.icons8.com/external-tal-revivo-color-tal-revivo/48/external-plotly-a-graphing-library-for-making-interactive-graphs-javascript-logo-color-tal-revivo.png" alt="Dash" width="50" height="50"/>
+  
+  <img src="https://img.icons8.com/fluency/48/bootstrap.png" alt="Bootstrap" width="50" height="50"/>
+  
+  <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/NumPy_logo_2020.svg" alt="NumPy" width="50" height="50"/>
+  
+  <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Pandas_logo.svg" alt="Pandas" width="50" height="50"/>
+  
+  <img src="https://img.icons8.com/color/48/000000/css3.png" alt="CSS3" width="50" height="50"/>
 
-  📊 Dash
+</div>
 
-  💠 Dash Bootstrap Components
-
-  📈 Plotly
-
-  <img src="https://img.icons8.com/color/48/000000/bootstrap.png" alt="Bootstrap" width="40" height="40"/>
-
-  <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/NumPy_logo_2020.svg" alt="NumPy" width="40" height="40"/>
-
-  <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Pandas_logo.svg" alt="Pandas" width="40" height="40"/>
-
-  <img src="https://img.icons8.com/color/48/000000/css3.png" alt="CSS" width="40" height="40"/>
-
-</p>
 
 ---
 
