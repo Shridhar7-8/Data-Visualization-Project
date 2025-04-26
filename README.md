@@ -16,13 +16,13 @@ This project provides a comprehensive solution for predicting diabetes patient r
 
 <p align="left">
   <a href="https://www.python.org/" target="_blank" rel="noreferrer">
-    <img src="https://img.icons8.com/color/48/000000/python.png" alt="Python" width="40" height="40"/>
+    <img src="https://img.icons8.com/color/48/000000/python--v1.png" alt="Python" width="40" height="40"/>
   </a> 
-  <a href="https://dash.plotly.com/" target="_blank" rel="noreferrer">
+  <a href="https://plotly.com/dash/" target="_blank" rel="noreferrer">
     <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Plotly-logo-01-square.png" alt="Dash" width="40" height="40"/>
   </a> 
   <a href="https://plotly.com/" target="_blank" rel="noreferrer">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Plotly-logo.png" alt="Plotly" width="40" height="40"/>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/10/Plotly_logo.png" alt="Plotly" width="70" height="40"/>
   </a> 
   <a href="https://getbootstrap.com/" target="_blank" rel="noreferrer">
     <img src="https://img.icons8.com/color/48/000000/bootstrap.png" alt="Bootstrap" width="40" height="40"/>
@@ -31,12 +31,14 @@ This project provides a comprehensive solution for predicting diabetes patient r
     <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/NumPy_logo_2020.svg" alt="NumPy" width="40" height="40"/>
   </a> 
   <a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer">
-    <img src="https://pandas.pydata.org/static/img/pandas_white.svg" alt="Pandas" width="40" height="40"/>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Pandas_logo.svg" alt="Pandas" width="40" height="40"/>
   </a> 
   <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noreferrer">
     <img src="https://img.icons8.com/color/48/000000/css3.png" alt="CSS" width="40" height="40"/>
   </a> 
 </p>
+
+---
 
 - **Python** — Core programming language  
 - **Dash** — Web application framework for dashboards  
@@ -44,7 +46,7 @@ This project provides a comprehensive solution for predicting diabetes patient r
 - **Plotly** — Interactive graphing library  
 - **NumPy** — Numerical computations  
 - **Pandas** — Data manipulation and analysis  
-- **CSS** — Styling of dashboard components  
+- **CSS** — Styling the dashboard components  
 - **OS and Base64** — System operations and image encoding
 
 
