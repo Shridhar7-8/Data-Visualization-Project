@@ -11,6 +11,19 @@ This project provides a comprehensive solution for predicting diabetes patient r
 3. **Interactive Dashboard**: Visualization and monitoring of readmission risks
 4. **Resource Allocation**: Recommendations for optimizing healthcare resources
 
+   
+## 🛠️ Tools & Libraries Used
+
+- 🐍 **Python** — Core programming language
+- 📊 **Dash** — Web application framework for building dashboards  
+- 💠 **Dash Bootstrap Components** — Bootstrap-styled components for Dash
+- 📈 **Plotly** — Interactive graphing library (including `plotly.express`, `plotly.graph_objects`, and `plotly.offline`)
+- 🧮 **NumPy** — Numerical computing and array operations
+- 📋 **Pandas** — Data manipulation and analysis
+- 📂 **OS** — Interacting with the file system
+- 🖼️ **Base64** — Encoding images for embedding in the dashboard
+
+
 ## Team Members
 
 - Shridhar Kumar
