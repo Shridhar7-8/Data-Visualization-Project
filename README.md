@@ -20,13 +20,11 @@ This project provides a comprehensive solution for predicting diabetes patient r
     <img src="https://img.icons8.com/color/48/000000/python--v1.png" alt="Python" width="40" height="40"/>
   </a>&nbsp;&nbsp;
 
-  <a href="https://plotly.com/" target="_blank" rel="noreferrer">
-    <img src="https://seeklogo.com/images/P/plotly-logo-5086CAA6EF-seeklogo.com.png" alt="Plotly" width="60" height="40"/>
-  </a>&nbsp;&nbsp;
+  📊 <a href="https://dash.plotly.com/" target="_blank" rel="noreferrer">Dash</a>&nbsp;&nbsp;
 
-  <a href="https://dash.plotly.com/" target="_blank" rel="noreferrer">
-    <img src="https://img.icons8.com/ios-filled/50/000000/dash--v1.png" alt="Dash" width="40" height="40"/>
-  </a>&nbsp;&nbsp;
+  💠 <a href="https://dash-bootstrap-components.opensource.faculty.ai/" target="_blank" rel="noreferrer">Dash Bootstrap Components</a>&nbsp;&nbsp;
+
+  📈 <a href="https://plotly.com/python/" target="_blank" rel="noreferrer">Plotly</a>&nbsp;&nbsp;
 
   <a href="https://getbootstrap.com/" target="_blank" rel="noreferrer">
     <img src="https://img.icons8.com/color/48/000000/bootstrap.png" alt="Bootstrap" width="40" height="40"/>
