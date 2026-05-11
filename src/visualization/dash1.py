@@ -16,7 +16,7 @@ def load_image(path):
     return f'data:image/png;base64,{encoded}'
 
 # Load the data
-data = pd.read_csv(r'E:\Data-Visualization-Project\notebooks\diabetic_data.csv')
+data = pd.read_csv(r'C:\Users\SASWATA GHOSH\Data-Visualization-Project\notebooks\diabetic_data.csv')
 
 # Ensure readmission categories ordered
 if 'readmitted' in data.columns:
@@ -179,7 +179,7 @@ prev_in_pct = (
 disp_count_df = data['discharge_name'].value_counts().reset_index()
 disp_count_df.columns = ['disposition', 'count']
 
-metrics_path=r'E:\Data-Visualization-Project\src\models\model_metrics.csv'
+metrics_path = r'C:\Users\SASWATA GHOSH\Data-Visualization-Project\src\models\model_metrics.csv'
 model_metrics=pd.read_csv(metrics_path)
 
 
@@ -226,14 +226,14 @@ def serve_eda():
             )
         ),
 
-        # 4. Readmission Rate by Gender
-        html.H4("Readmission Rate by Gender"),
-        dcc.Graph(
-            figure=px.bar(
-                gender_pct, x='gender', y='pct', color='readmitted', barmode='group',
-                title='Readmission Percentage by Gender'
-            )
-        ),
+        # # 4. Readmission Rate by Gender
+        # html.H4("Readmission Rate by Gender"),
+        # dcc.Graph(
+        #     figure=px.bar(
+        #         gender_pct, x='gender', y='count', color='readmitted', barmode='group',
+        #         title='Readmission Percentage by Gender'
+        #     )
+        # ),
 
         # 5. Medications vs Hospital Stay
         html.H4("Medications vs Length of Stay"),
@@ -424,110 +424,209 @@ app.layout = html.Div([
 
 def serve_home():
     return html.Div([
+
         # Hero Section
         html.Div([
             html.Div([
-                html.H2("Diabetes Readmission Prediction Project", 
-                       style={'color':'white', 'fontSize':'2.5rem', 'marginBottom':'20px'}),
-                html.P("An end-to-end solution for predicting hospital readmissions for diabetes patients using machine learning.",
-                      style={'color':'white', 'fontSize':'1.2rem', 'maxWidth':'800px'})
-            ], style={'padding':'80px 20px', 'background':'linear-gradient(135deg, #3498db, #2c3e50)'})
-        ], style={'margin':'-20px -20px 40px -20px'}),
-        
-        # Project Overview
-        html.Div([
-            html.H3("Project Overview", style={'color':'#2c3e50', 'marginBottom':'30px'}),
-            html.Div([
-                html.Div([
-                    html.H4("Data Pipeline", style={'color':'#3498db'}),
-                    html.P("Automated data cleaning, preprocessing, and feature engineering pipelines"),
-                    html.H4("ML Models", style={'color':'#3498db'}),
-                    html.P("Multiple machine learning models trained and evaluated for optimal performance"),
-                    html.H4("Dashboard", style={'color':'#3498db'}),
-                    html.P("Interactive visualization platform for monitoring readmission risks"),
-                    html.H4("Resource Optimization", style={'color':'#3498db'}),
-                    html.P("Data-driven recommendations for healthcare resource allocation")
-                ], style={'flex':'1', 'padding':'20px', 'background':'#f8f9fa', 'borderRadius':'10px',
-                          'marginRight':'20px'}),
-                
-                # Team Members
-                html.Div([
-                    html.H3("Team Members", style={'color':'#2c3e50', 'marginBottom':'20px'}),
-                    html.Div([
-                        html.Div([
-                            html.Div([
-                                html.H4("Shridhar Kumar", style={'margin':'0'}),
-                                html.P("Team Lead", style={'color':'#7f8c8d', 'margin':'5px 0'})
-                            ], style={'padding':'15px'})
-                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px', 'marginBottom':'15px'}),
-                        
-                        html.Div([
-                            html.Div([
-                                html.H4("Kritika Gahlawat", style={'margin':'0'}),
-                                
-                            ], style={'padding':'15px'})
-                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px', 'marginBottom':'15px'}),
-                        
-                        html.Div([
-                            html.Div([
-                                html.H4("Biswajit Gorai", style={'margin':'0'}),
-                        
-                            ], style={'padding':'15px'})
-                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px', 'marginBottom':'15px'}),
-                        
-                        html.Div([
-                            html.Div([
-                                html.H4("Neha Rana", style={'margin':'0'}),
-                                
-                            ], style={'padding':'15px'})
-                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px', 'marginBottom':'15px'}),
-                        
-                        html.Div([
-                            html.Div([
-                                html.H4("Saswata Ghosh", style={'margin':'0'}),
-                        
-                            ], style={'padding':'15px'})
-                        ], style={'border':'1px solid #ecf0f1', 'borderRadius':'8px'})
-                    ], style={'display':'flex', 'flexDirection':'column'})
-                ], style={'flex':'0 0 300px', 'padding':'20px', 'background':'white', 
-                         'borderRadius':'10px', 'boxShadow':'0 2px 4px rgba(0,0,0,0.1)'})
-            ], style={'display':'flex', 'gap':'30px', 'marginBottom':'40px'}),
-            
-            # Key Features
-            html.Div([
-                html.H3("Key Features", style={'color':'#2c3e50', 'marginBottom':'30px'}),
-                html.Div([
-                    html.Div([
-                        html.Img(src="https://cdn-icons-png.flaticon.com/512/1534/1534959.png",
-                                style={'height':'60px', 'marginBottom':'15px'}),
-                        html.H4("Predictive Analytics"),
-                        html.P("Advanced ML models for accurate readmission prediction", 
-                              style={'color':'#7f8c8d'})
-                    ], style={'textAlign':'center', 'padding':'20px', 'flex':'1'}),
-                    
-                    html.Div([
-                        html.Img(src="https://cdn-icons-png.flaticon.com/512/2103/2103787.png",
-                                style={'height':'60px', 'marginBottom':'15px'}),
-                        html.H4("Interactive Dashboard"),
-                        html.P("Real-time visualization of patient data and predictions", 
-                              style={'color':'#7f8c8d'})
-                    ], style={'textAlign':'center', 'padding':'20px', 'flex':'1'}),
-                    
-                    html.Div([
-                        html.Img(src="https://cdn-icons-png.flaticon.com/512/3594/3594465.png",
-                                style={'height':'60px', 'marginBottom':'15px'}),
-                        html.H4("Clinical Insights"),
-                        html.P("Actionable recommendations for healthcare providers", 
-                              style={'color':'#7f8c8d'})
-                    ], style={'textAlign':'center', 'padding':'20px', 'flex':'1'})
-                ], style={'display':'flex', 'gap':'30px', 'background':'#f8f9fa',
-                          'padding':'30px', 'borderRadius':'10px'})
-            ])
-        ], style={'maxWidth':'1200px', 'margin':'0 auto'})
-    ])
+                html.H2(
+                    "Diabetes Readmission Prediction Project",
+                    style={
+                        'color': 'white',
+                        'fontSize': '2.5rem',
+                        'marginBottom': '20px'
+                    }
+                ),
 
+                html.P(
+                    "An end-to-end solution for predicting hospital readmissions for diabetes patients using machine learning.",
+                    style={
+                        'color': 'white',
+                        'fontSize': '1.2rem',
+                        'maxWidth': '800px'
+                    }
+                )
+
+            ], style={
+                'padding': '80px 20px',
+                'background': 'linear-gradient(135deg, #3498db, #2c3e50)'
+            })
+
+        ], style={'margin': '-20px -20px 40px -20px'}),
+
+        # Overview + Developer
+        html.Div([
+
+            # Project Overview
+            html.Div([
+
+                html.H3(
+                    "Project Overview",
+                    style={
+                        'color': '#2c3e50',
+                        'marginBottom': '30px'
+                    }
+                ),
+
+                html.Div([
+
+                    html.H4("Data Pipeline", style={'color': '#3498db'}),
+                    html.P("Automated data cleaning, preprocessing, and feature engineering pipelines"),
+
+                    html.H4("ML Models", style={'color': '#3498db'}),
+                    html.P("Multiple machine learning models trained and evaluated for optimal performance"),
+
+                    html.H4("Dashboard", style={'color': '#3498db'}),
+                    html.P("Interactive visualization platform for monitoring readmission risks"),
+
+                    html.H4("Resource Optimization", style={'color': '#3498db'}),
+                    html.P("Data-driven recommendations for healthcare resource allocation")
+
+                ], style={
+                    'padding': '20px',
+                    'background': '#f8f9fa',
+                    'borderRadius': '10px'
+                })
+
+            ], style={'flex': '1'}),
+
+            # Developer Section
+            html.Div([
+
+                html.H3(
+                    "Developer",
+                    style={
+                        'color': '#2c3e50',
+                        'marginBottom': '20px'
+                    }
+                ),
+
+                html.Div([
+
+                    html.H4(
+                        "Saswata Ghosh",
+                        style={
+                            'margin': '0',
+                            'textAlign': 'center',
+                            'fontWeight': 'bold'
+                        }
+                    )
+
+                ], style={
+                    'padding': '20px',
+                    'border': '1px solid #ecf0f1',
+                    'borderRadius': '8px',
+                    'backgroundColor': '#f8f9fa'
+                })
+
+            ], style={
+                'flex': '0 0 300px',
+                'padding': '20px',
+                'background': 'white',
+                'borderRadius': '10px',
+                'boxShadow': '0 2px 4px rgba(0,0,0,0.1)'
+            })
+
+        ], style={
+            'display': 'flex',
+            'gap': '30px',
+            'marginBottom': '40px'
+        }),
+
+        # Key Features
+        html.Div([
+
+            html.H3(
+                "Key Features",
+                style={
+                    'color': '#2c3e50',
+                    'marginBottom': '30px'
+                }
+            ),
+
+            html.Div([
+
+                html.Div([
+                    html.Img(
+                        src="https://cdn-icons-png.flaticon.com/512/1534/1534959.png",
+                        style={
+                            'height': '60px',
+                            'marginBottom': '15px'
+                        }
+                    ),
+
+                    html.H4("Predictive Analytics"),
+
+                    html.P(
+                        "Advanced ML models for accurate readmission prediction",
+                        style={'color': '#7f8c8d'}
+                    )
+
+                ], style={
+                    'textAlign': 'center',
+                    'padding': '20px',
+                    'flex': '1'
+                }),
+
+                html.Div([
+                    html.Img(
+                        src="https://cdn-icons-png.flaticon.com/512/2103/2103787.png",
+                        style={
+                            'height': '60px',
+                            'marginBottom': '15px'
+                        }
+                    ),
+
+                    html.H4("Interactive Dashboard"),
+
+                    html.P(
+                        "Real-time visualization of patient data and predictions",
+                        style={'color': '#7f8c8d'}
+                    )
+
+                ], style={
+                    'textAlign': 'center',
+                    'padding': '20px',
+                    'flex': '1'
+                }),
+
+                html.Div([
+                    html.Img(
+                        src="https://cdn-icons-png.flaticon.com/512/3594/3594465.png",
+                        style={
+                            'height': '60px',
+                            'marginBottom': '15px'
+                        }
+                    ),
+
+                    html.H4("Clinical Insights"),
+
+                    html.P(
+                        "Actionable recommendations for healthcare providers",
+                        style={'color': '#7f8c8d'}
+                    )
+
+                ], style={
+                    'textAlign': 'center',
+                    'padding': '20px',
+                    'flex': '1'
+                })
+
+            ], style={
+                'display': 'flex',
+                'gap': '30px',
+                'background': '#f8f9fa',
+                'padding': '30px',
+                'borderRadius': '10px'
+            })
+
+        ])
+
+    ], style={
+        'maxWidth': '1200px',
+        'margin': '0 auto'
+    })
 def serve_model_viz():
-    base_vis=r'E:\Data-Visualization-Project\src\models\visualizations'
+    base_vis=r'C:\Users\SASWATA GHOSH\Data-Visualization-Project\src\models\visualizations'
     default_model = model_metrics['model'].iloc[0]
     return html.Div([
         html.H2('Model Visualizations',style={'margin-bottom':'20px'}),
@@ -596,7 +695,7 @@ def serve_recommendations():
                     ], style={'padding': '20px'})
                 ], className='section-card')
             ]),
-
+            
             # Operational Factors Section
             html.Div([
                 html.Div([
@@ -737,7 +836,7 @@ def display_page(pathname):
     Input('model-dropdown', 'value')
 )
 def update_model_visualizations(selected_model):
-    base_vis = r'E:\Data-Visualization-Project\src\models\visualizations'
+    base_vis = r'C:\Users\SASWATA GHOSH\Data-Visualization-Project\src\models\visualizations'
     confusion_path = os.path.join(base_vis, f"{selected_model}_confusion_matrix.png")
     roc_path = os.path.join(base_vis, f"{selected_model}_roc_curve.png")
     pr_path = os.path.join(base_vis, f"{selected_model}_pr_curve.png")
@@ -767,7 +866,7 @@ def update_predictions(selected_model, pathname):
             return (dash.no_update,) * 5
 
         # load your CSV
-        base_path = r'E:\Data-Visualization-Project\src\models\src\models\predictions'
+        base_path = r'C:\Users\SASWATA GHOSH\Data-Visualization-Project\src\models\src\models\predictions'
         pred_path = os.path.join(base_path, f'{selected_model}_predictions.csv')
         if not os.path.exists(pred_path):
             raise FileNotFoundError(f"Predictions file not found: {pred_path}")
@@ -889,4 +988,4 @@ def update_predictions(selected_model, pathname):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+   app.run(debug=True)
